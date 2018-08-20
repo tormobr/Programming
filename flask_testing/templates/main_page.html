@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<HEAD>
+<TITLE>Clima Plotter</TITLE>
+<meta Http-Equiv="Cache-Control" Content="no-cache">
+<meta Http-Equiv="Pragma" Content="no-cache">
+<meta Http-Equiv="Expires" Content="0">
+<meta Http-Equiv="Pragma-directive: no-cache">
+<meta Http-Equiv="Cache-directive: no-cache">
+</HEAD>
+
+<font color="white"><h1>Graphs over temperatur and co2 emission over the years</h1>
+<h3>Change the parameters for the plots on the left side and enjoy the beautiful lines!.<br> Visit <a href="/help"><font color="orange">help</font></a>for help!<br> Or check out <a href="/chief"><font color="orange">Das beste</font></a> for a treat!.</h3></font>
+
+<body bgcolor="#000000">
+<img src="{{tempfile}}"  hspace=340 vspace=50 ></img>
+<img src="{{co2file}}"  hspace=310 vspace=50 ></img>
+<img src="{{co2countryfile}}"  hspace=310 vspace=50 ></img>
+<form action="/" method="POST">
+    <div style="position: absolute; top: 170px; left: 10px; width: 320px; height: 450px;"">
+
+            <br>&nbsp;&nbsp;<b><font color="orange">Choose month &emsp; Start/end year</font></b><br><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="January" checked><font color="orange">January</font>
+
+            &emsp;&emsp;&emsp;&emsp;
+            <input type="text" name="startyear temp" value="1960" maxlength="4" size="4"><br>
+
+            &nbsp;&nbsp;<input type="radio" name="month" value="February" ><font color="orange">February</font> 
+
+            &emsp;&emsp;&emsp;&nbsp;
+            <input type="text" name="endyear temp" value="2012" maxlength="4" size="4"><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="March" ><font color="orange">March</font> <br>
+
+            &nbsp;&nbsp;<input type="radio" name="month" value="April" ><font color="orange">April</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="May" ><font color="orange">May</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="June" ><font color="orange">June</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="July" ><font color="orange">July</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="August" ><font color="orange">August</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="September" ><font color="orange">September</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="October" ><font color="orange">October</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="November" ><font color="orange">November</font><br>
+            &nbsp;&nbsp;<input type="radio" name="month" value="December" ><font color="orange">December</font><br><br>
+
+
+            &emsp;&emsp;&emsp;<input type="submit" value="Save changes" style="width: 200px; height: 50px">
+        
+    </div>
+
+    <div style="position: absolute; top: 770px; left: 10px; width: 320px; height: 250px;"">
+
+            <br>&emsp;&emsp;&emsp;&emsp;<b><font color="orange">Start/end year</font></b><br><br>
+            &emsp;&emsp;&emsp;&emsp;&emsp;<input type="text" name="startyear co2" value="1960" maxlength="4" size="4"><br>
+            &emsp;&emsp;&emsp;&emsp;&emsp;<input type="text" name="endyear co2" value="2012" maxlength="4" size="4"><br><br><br>
+            &emsp;&emsp;&emsp;<input type="submit" value="Save changes" style="width: 200px; height: 50px">
+
+    </div>
+
+    <div style="position: absolute; top: 1300px; left: 10px; width: 320px; height: 250px;"">
+
+            <br>&nbsp;&nbsp;<b><font color="orange">Year &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; min/max</font></b><br><br>
+
+            &nbsp;&nbsp;<input type="text" name="year co2_country" value="1960" maxlength="4" size="4">
+            &emsp;&emsp;&nbsp;<input type="text" name="min co2_country" value="10"  size="4"><br>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+            <input type="text" name="max co2_country" value="30" m size="4"><br><br><br>
+            &nbsp;&nbsp;<input type="submit" value="Save changes" style="width: 200px; height: 50px">
+
+    </div>
+</form>
+</body>
