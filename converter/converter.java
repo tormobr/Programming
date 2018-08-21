@@ -36,7 +36,7 @@ public class converter{
     }
 
 
-    private static String decToBin(int number) {
+    public static String decToBin(int number) {
         int remainder = 0;
         String res = "";
         while(number > 0) {
@@ -47,7 +47,7 @@ public class converter{
         return res;
     }
 
-    private static String decToHex(int number) {
+    public static String decToHex(int number) {
         int remainder = 0;
         String res = "";
         while(number > 0) {
@@ -58,7 +58,7 @@ public class converter{
         return res;
     }
 
-    private static String decToOct(int number) {
+    public static String decToOct(int number) {
         int remainder = 0;
         String res = "";
         while(number > 0) {
