@@ -1,10 +1,11 @@
-
+import java.awt.*;
+import javax.swing.*;
 import java.util.Scanner;
 
 public class converter{
 	static String[] hexSymbols = {"0" ,"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
     public static void main(String[] args) {
-        int number;
+/*        int number;
 
         Scanner in = new Scanner(System.in);
 
@@ -26,7 +27,12 @@ public class converter{
             System.out.print("Convert to oct is:");
             String res3 = decToOct(number);
             System.out.println(res3);
-        }
+        }*/
+
+        Disp hax = new Disp();
+        hax.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        hax.setSize(300, 300);
+        hax.setVisible(true);
     }
 
 
@@ -66,15 +72,18 @@ public class converter{
     private static String binToDec(int number) {
     	String val = String.valueOf(number);
 		int decimalValue = Integer.parseInt(val, 2);
+		return String.valueOf(decimalValue);
     }
 
     private static String hexToDec(int number) {
     	String val = String.valueOf(number);
 		int decimalValue = Integer.parseInt(val, 16);
+		return String.valueOf(decimalValue);
     }
 
     private static String octToDec(int number) {
     	String val = String.valueOf(number);
 		int decimalValue = Integer.parseInt(val, 8);
+		return String.valueOf(decimalValue);
     }
 }
