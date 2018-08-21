@@ -31,7 +31,8 @@ public class converter{
 
         Disp hax = new Disp();
         hax.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        hax.setSize(300, 300);
+        hax.setSize(400, 300);
+        hax.setResizable(false);
         hax.setVisible(true);
     }
 
