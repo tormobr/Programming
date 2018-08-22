@@ -11,9 +11,10 @@ import javax.swing.text.StyledDocument;
 class TypeTest{
 	static JTextField input;
 	static int wordsTyped = 0;
-	static int correctWords = 0;
+	static double correctWords = 0;
 	static int charsTyped = 0; 
 	static String[] textArray = new String[50];
+	static double numberOfWords;
 	static JTextPane textArea;
 
 	public static void main(String[] args){
@@ -40,8 +41,8 @@ class TypeTest{
 		EmptyBorder eb = new EmptyBorder(new Insets(10, 10, 10, 10));
 		textArea = new JTextPane();
 		textArea.setBorder(eb);
-		textArea.setPreferredSize( new Dimension(400, 200));
-		textArea.setFont(new Font("Serif", Font.PLAIN, 16));
+		textArea.setPreferredSize( new Dimension(400, 150));
+		textArea.setFont(new Font("Serif", Font.BOLD, 17));
 		textArea.setEditable(false);
 		
 		//textArea.setLineWrap(true);
@@ -84,6 +85,7 @@ class TypeTest{
 
 			}
 		}
+		numberOfWords = index;
 
 	}
 
@@ -98,35 +100,55 @@ class TypeTest{
 	static class KeyPress implements KeyListener{
 
 		public void keyReleased(KeyEvent e){
-
-			SimpleAttributeSet attrs = new SimpleAttributeSet();
-			StyleConstants.setForeground(attrs, Color.green);
-
-			StyledDocument sdoc = textArea.getStyledDocument();
-
 			input.setText(input.getText().trim());
-			int keyCode = e.getKeyCode();
-			String in = input.getText().trim();
-			if(keyCode == 32 ){
-				if(!(in.equals(""))){
-					
-					if(in.equals(textArray[wordsTyped])){
-						charsTyped += in.length()+1;
-						sdoc.setCharacterAttributes(0, charsTyped, attrs, false);
-						input.setText("");
-						wordsTyped ++;
-
-					}
-					else{
-						System.out.println("wrong!");
-					}
-				}
-
-			}
 		}
 
 		public void keyPressed(KeyEvent e){
 
+			SimpleAttributeSet attrs = new SimpleAttributeSet();
+			SimpleAttributeSet attrs2 = new SimpleAttributeSet();
+			StyleConstants.setForeground(attrs, Color.decode("#228B22"));
+			StyleConstants.setForeground(attrs2, Color.decode("#8B0000"));
+
+			StyledDocument sdoc = textArea.getStyledDocument();
+
+			//input.setText(input.getText().trim());
+			int keyCode = e.getKeyCode();
+
+			if(keyCode == 32 ){
+
+				String in = input.getText().trim();
+
+				if(!(in.equals(""))){
+					if(in.trim().equals(textArray[wordsTyped])){
+						sdoc.setCharacterAttributes(charsTyped, textArray[wordsTyped].length() + 1, attrs, false);
+						charsTyped += in.length()+1;
+						input.setText("");
+						wordsTyped ++;
+						correctWords ++;
+
+					}
+					else{
+						
+						sdoc.setCharacterAttributes(charsTyped, textArray[wordsTyped].length() + 1, attrs2, false);
+						charsTyped += textArray[wordsTyped].length() + 1;
+						input.setText("");
+						wordsTyped ++;
+					}
+				}
+				if(wordsTyped >= numberOfWords){
+					JFrame res = new JFrame("Simple TypeTest.");
+					res.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					res.setSize(300, 100);
+					JLabel percentage = new JLabel("correct word percentage: " + String.valueOf((correctWords/(numberOfWords) * 100)) + "%");
+					res.add(percentage);
+					res.setVisible(true);
+					
+				}
+
+
+
+			}
 		}
 		public void keyTyped(KeyEvent e){
 
