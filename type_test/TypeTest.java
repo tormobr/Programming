@@ -16,6 +16,9 @@ class TypeTest{
 	static String[] textArray = new String[50];
 	static double numberOfWords;
 	static JTextPane textArea;
+	static boolean started = false;
+	static double startTime;
+	static double endTime;
 
 	public static void main(String[] args){
 		JFrame hax = new JFrame("Simple TypeTest.");
@@ -105,6 +108,12 @@ class TypeTest{
 
 		public void keyPressed(KeyEvent e){
 
+			if(started == false){
+				started = true;
+				startTime = System.currentTimeMillis();
+
+			}
+
 			SimpleAttributeSet attrs = new SimpleAttributeSet();
 			SimpleAttributeSet attrs2 = new SimpleAttributeSet();
 			StyleConstants.setForeground(attrs, Color.decode("#228B22"));
@@ -137,11 +146,27 @@ class TypeTest{
 					}
 				}
 				if(wordsTyped >= numberOfWords){
+					endTime = System.currentTimeMillis();
+					double timeUsed = (endTime - startTime)/1000;
+
+
 					JFrame res = new JFrame("Simple TypeTest.");
 					res.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					res.setSize(300, 100);
+					JPanel panel = new JPanel(new GridBagLayout());
+					res.add(panel, BorderLayout.NORTH);
+					GridBagConstraints c = new GridBagConstraints();
+					c.insets = new Insets(10,10,10,10);
+
 					JLabel percentage = new JLabel("correct word percentage: " + String.valueOf((correctWords/(numberOfWords) * 100)) + "%");
-					res.add(percentage);
+					c.gridx = 0;
+					c.gridy = 0;
+					panel.add(percentage, c);
+
+					JLabel wpm = new JLabel("WPM: " + String.valueOf((correctWords*(60) / timeUsed)));
+					c.gridx = 0;
+					c.gridy = 1;
+					panel.add(wpm, c);
 					res.setVisible(true);
 					
 				}
