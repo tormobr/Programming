@@ -9,28 +9,35 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 class TypeTest{
-	static JTextField input;
-	static int wordsTyped = 0;
-	static double correctWords = 0;
-	static int charsTyped = 0; 
-	static String[] textArray = new String[100];
-	static double numberOfWords;
-	static JTextPane textArea;
-	static boolean started = false;
-	static double startTime;
-	static double endTime;
-
-	public static void main(String[] args){
+	JTextField input;
+	int wordsTyped = 0;
+	double correctWords = 0;
+	int charsTyped = 0; 
+	String[] textArray = new String[100];
+	double numberOfWords;
+	JTextPane textArea;
+	boolean started = false;
+	double startTime;
+	double endTime;
+	String fileName;
+	String fileString;
+	int wordStart = 0;
+	boolean error = false;
+	public TypeTest(String file){
+		this.fileName = file;
+		//Setting up the main window
 		JFrame hax = new JFrame("Simple TypeTest.");
 		hax.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		hax.setSize(800, 300);
+		hax.setSize(800, 350);
 		//hax.setResizable(false);
 
+		//adding panel to frame
 		JPanel panel = new JPanel(new GridBagLayout());
 		hax.add(panel, BorderLayout.NORTH);
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(10,10,10,10);
 
+		//title
 		c.gridx = 0;
 		c.gridy = 0;
 		JLabel title = new JLabel("TypeTester");
@@ -38,27 +45,21 @@ class TypeTest{
 		panel.add(title, c);
 
 
-
+		//adding the textArea
 		c.gridx = 0;
 		c.gridy = 1;
 		EmptyBorder eb = new EmptyBorder(new Insets(10, 10, 10, 10));
 		textArea = new JTextPane();
 		textArea.setBorder(eb);
+
 		textArea.setPreferredSize( new Dimension(600, 200));
 		textArea.setFont(new Font("Serif", Font.BOLD, 16));
 		textArea.setEditable(false);
-		
-		//textArea.setLineWrap(true);
-		//textArea.setWrapStyleWord(true);
-		
-		readFile("words.txt");
-		addText(textArray, textArea);
-
 
 		panel.add(textArea, c);
 
 
-
+		//adding the input field
 		c.gridx = 0;
 		c.gridy = 2;
 		input = new JTextField(10);
@@ -66,12 +67,21 @@ class TypeTest{
 		input.addKeyListener(new KeyPress());
 		panel.add(input, c);
 
+		readFile("words.txt");
+		addText(textArray, textArea);
+		fileString = textArea.getText();
 
+		System.out.println(file);
 		hax.setVisible(true);
-
+	}
+	public static void main(String[] args){
+		System.out.println((int)"A".charAt(0));
+		TypeTest tt = new TypeTest("words.txt");
 
 	}
-	private static void readFile(String fileName){
+
+	//method for reading the file and inserting the words
+	private void readFile(String fileName){
 		Scanner scanner;
 		try{
 		scanner = new Scanner(new File(fileName));
@@ -84,6 +94,7 @@ class TypeTest{
 			while(scanner2.hasNext() && index < 100){
 				String word = scanner2.next();
 				textArray[index] = word;
+
 				index ++;
 
 			}
@@ -92,59 +103,88 @@ class TypeTest{
 
 	}
 
-	private static void addText(String[] s, JTextPane tf){
+	//adds the words to the text area
+	private void addText(String[] s, JTextPane tf){
 		for(int i = 0; i < s.length; i++){
 			if(s[i] != null){
 				tf.setText(tf.getText() + " " + s[i]);
 			}
 		}
 	}
+	private boolean correctKey(int keyCode){
+		char key = Character.toLowerCase((char)keyCode);
 
-	static class KeyPress implements KeyListener{
+		SimpleAttributeSet attrs = new SimpleAttributeSet();
+		SimpleAttributeSet attrs2 = new SimpleAttributeSet();
+		SimpleAttributeSet attrs3 = new SimpleAttributeSet();
+		StyleConstants.setForeground(attrs, Color.decode("#228B22"));
+		StyleConstants.setForeground(attrs2, Color.decode("#8B0000"));
+		StyleConstants.setForeground(attrs3, Color.decode("#000000"));
+		StyledDocument sdoc = textArea.getStyledDocument();
 
+		if(charsTyped >= fileString.length()){
+			return false;
+		}
+		if(keyCode == 8){
+			if(charsTyped > wordStart){
+				charsTyped --;
+				sdoc.setCharacterAttributes(charsTyped+1, 1, attrs3, false);
+			}
+		}
+
+		else if(key == fileString.charAt(charsTyped)){
+			sdoc.setCharacterAttributes(charsTyped, 1, attrs, false);
+		}
+		else if(key != fileString.charAt(charsTyped)){
+			sdoc.setCharacterAttributes(charsTyped, 1, attrs2, false);
+		}
+		return true;
+	}
+
+
+	//keypress handler
+	class KeyPress implements KeyListener{
+
+		//when key is released
 		public void keyReleased(KeyEvent e){
-			input.setText(input.getText().trim());
 		}
 
 		public void keyPressed(KeyEvent e){
+			int keyCode = e.getKeyCode();
 
+			//if first key then start timer
 			if(started == false){
 				started = true;
 				startTime = System.currentTimeMillis();
 
 			}
 
-			SimpleAttributeSet attrs = new SimpleAttributeSet();
-			SimpleAttributeSet attrs2 = new SimpleAttributeSet();
-			StyleConstants.setForeground(attrs, Color.decode("#228B22"));
-			StyleConstants.setForeground(attrs2, Color.decode("#8B0000"));
+			if(keyCode != 8){
+				charsTyped ++;
+			}
 
-			StyledDocument sdoc = textArea.getStyledDocument();
+
+
 
 			//input.setText(input.getText().trim());
-			int keyCode = e.getKeyCode();
-
+			correctKey(keyCode);
 			if(keyCode == 32 ){
-
 				String in = input.getText().trim();
-
+				//if the input from user is not empty 
 				if(!(in.equals(""))){
-					if(in.trim().equals(textArray[wordsTyped])){
-						sdoc.setCharacterAttributes(charsTyped, textArray[wordsTyped].length() + 1, attrs, false);
-						charsTyped += in.length()+1;
+					//if input is correct
+					if(in.equals(textArray[wordsTyped])){
+
 						input.setText("");
+						wordStart += textArray[wordsTyped].length() + 1;
 						wordsTyped ++;
 						correctWords ++;
 
 					}
-					else{
-						
-						sdoc.setCharacterAttributes(charsTyped, textArray[wordsTyped].length() + 1, attrs2, false);
-						charsTyped += textArray[wordsTyped].length() + 1;
-						input.setText("");
-						wordsTyped ++;
-					}
+
 				}
+
+				//when done, add result window to screen
 				if(wordsTyped >= numberOfWords){
 					endTime = System.currentTimeMillis();
 					double timeUsed = (endTime - startTime)/1000;
@@ -176,7 +216,7 @@ class TypeTest{
 			}
 		}
 		public void keyTyped(KeyEvent e){
-
+			//not used
 		}
 	}
 }
