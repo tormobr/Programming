@@ -231,6 +231,12 @@ class TypeTest{
 						wordStart += textArray[wordsTyped].length() + 1;
 						wordsTyped ++;
 						correctWords ++;
+						if(wordsTyped < numberOfWords){
+							SimpleAttributeSet set = new SimpleAttributeSet();
+							StyleConstants.setUnderline(set, true);
+							StyledDocument sdoc = textArea.getStyledDocument();
+							sdoc.setCharacterAttributes(wordStart+1, textArray[wordsTyped].length(), set, false);
+						}
 					}
 				}
 
