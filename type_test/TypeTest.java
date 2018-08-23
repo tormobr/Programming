@@ -13,7 +13,7 @@ class TypeTest{
 	static int wordsTyped = 0;
 	static double correctWords = 0;
 	static int charsTyped = 0; 
-	static String[] textArray = new String[50];
+	static String[] textArray = new String[100];
 	static double numberOfWords;
 	static JTextPane textArea;
 	static boolean started = false;
@@ -44,8 +44,8 @@ class TypeTest{
 		EmptyBorder eb = new EmptyBorder(new Insets(10, 10, 10, 10));
 		textArea = new JTextPane();
 		textArea.setBorder(eb);
-		textArea.setPreferredSize( new Dimension(400, 150));
-		textArea.setFont(new Font("Serif", Font.BOLD, 17));
+		textArea.setPreferredSize( new Dimension(600, 200));
+		textArea.setFont(new Font("Serif", Font.BOLD, 16));
 		textArea.setEditable(false);
 		
 		//textArea.setLineWrap(true);
@@ -81,7 +81,7 @@ class TypeTest{
 		int index = 0;
 		while(scanner.hasNextLine()){
 			Scanner scanner2 = new Scanner(scanner.nextLine());
-			while(scanner2.hasNext() && index < 50){
+			while(scanner2.hasNext() && index < 100){
 				String word = scanner2.next();
 				textArray[index] = word;
 				index ++;
