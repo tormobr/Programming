@@ -129,14 +129,18 @@ class TypeTest{
 			if(charsTyped > wordStart){
 				charsTyped --;
 				sdoc.setCharacterAttributes(charsTyped+1, 1, attrs3, false);
+				if(charsTyped == wordStart+1){
+					error = false;
+				}
 			}
 		}
 
+		else if(key != fileString.charAt(charsTyped) || error){
+			error = true;
+			sdoc.setCharacterAttributes(charsTyped, 1, attrs2, false);
+		}
 		else if(key == fileString.charAt(charsTyped)){
 			sdoc.setCharacterAttributes(charsTyped, 1, attrs, false);
-		}
-		else if(key != fileString.charAt(charsTyped)){
-			sdoc.setCharacterAttributes(charsTyped, 1, attrs2, false);
 		}
 		return true;
 	}
