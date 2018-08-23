@@ -16,9 +16,6 @@ class TypeTest{
 	String[] textArray = new String[100];
 	double numberOfWords;
 	JTextPane textArea;
-	boolean started = false;
-	double startTime;
-	double endTime;
 	String fileName;
 	String fileString;
 	int wordStart = 0;
@@ -31,7 +28,7 @@ class TypeTest{
 		//Setting up the main window
 		hax = new JFrame("Simple TypeTest.");
 		hax.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		hax.setSize(800, 350);
+		hax.setSize(800, 400);
 		//hax.setResizable(false);
 
 		//adding panel to frame
@@ -55,8 +52,8 @@ class TypeTest{
 		textArea = new JTextPane();
 		textArea.setBorder(eb);
 
-		textArea.setPreferredSize( new Dimension(600, 200));
-		textArea.setFont(new Font("Serif", Font.BOLD, 16));
+		textArea.setPreferredSize( new Dimension(600, 250));
+		textArea.setFont(new Font("Serif", Font.BOLD, 20));
 		textArea.setEditable(false);
 
 		panel.add(textArea, c);
@@ -66,7 +63,7 @@ class TypeTest{
 		c.gridx = 0;
 		c.gridy = 2;
 		input = new JTextField(10);
-		input.setFont(new Font("Serif", Font.BOLD, 18));
+		input.setFont(new Font("Serif", Font.BOLD, 25));
 		input.addKeyListener(new KeyPress());
 		panel.add(input, c);
 
@@ -92,7 +89,7 @@ class TypeTest{
 			Scanner scanner2 = new Scanner(scanner.nextLine());
 			while(scanner2.hasNext() && index < 100){
 				String word = scanner2.next();
-				textArray[index] = word;
+				textArray[index] = word.toLowerCase();
 
 				index ++;
 
@@ -110,6 +107,8 @@ class TypeTest{
 			}
 		}
 	}
+
+	//checks if the input key matches with the one in the text and handles coloring
 	private void correctKey(int keyCode){
 		char key = Character.toLowerCase((char)keyCode);
 
@@ -129,7 +128,7 @@ class TypeTest{
 				charsTyped --;
 				sdoc.setCharacterAttributes(charsTyped+1, 1, attrs3, false);
 
-				if(charsTyped == errorDetected){
+				if(charsTyped <= errorDetected){
 					error = false;
 					errorDetected = -1;
 				}
@@ -150,8 +149,9 @@ class TypeTest{
 		return;
 	}
 
-	private void displayResults(){
-		endTime = System.currentTimeMillis();
+	//displays the results and restart option
+	private void displayResults(double startTime){
+		double endTime = System.currentTimeMillis();
 		double timeUsed = (endTime - startTime)/1000;
 
 
@@ -182,6 +182,7 @@ class TypeTest{
 		res.setVisible(true);	
 	}
 
+	//restart button handler
 	class ButtonPress implements ActionListener{
 		public void actionPerformed(ActionEvent evt){
 			hax.dispose();
@@ -192,14 +193,20 @@ class TypeTest{
 
 	//keypress handler
 	class KeyPress implements KeyListener{
-
+		double startTime;
+		boolean started = false;
 		//when key is released
 		public void keyReleased(KeyEvent e){
 		}
 
 		public void keyPressed(KeyEvent e){
-			int keyCode = e.getKeyCode();
 
+			int keyCode = e.getKeyCode();
+			if(keyCode < 65 || keyCode > 90){
+				if(keyCode != 32 && keyCode != 8){
+					return;
+				}
+			}
 			//if first key then start timer
 			if(started == false){
 				started = true;
@@ -210,9 +217,6 @@ class TypeTest{
 			if(keyCode != 8){
 				charsTyped ++;
 			}
-
-
-
 
 			//input.setText(input.getText().trim());
 			correctKey(keyCode);
@@ -227,14 +231,12 @@ class TypeTest{
 						wordStart += textArray[wordsTyped].length() + 1;
 						wordsTyped ++;
 						correctWords ++;
-
 					}
-
 				}
 
 				//when done, add result window to screen
 				if(wordsTyped >= numberOfWords){
-					displayResults();
+					displayResults(startTime);
 					
 				}
 
