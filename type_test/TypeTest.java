@@ -23,6 +23,7 @@ class TypeTest{
 	String fileString;
 	int wordStart = 0;
 	boolean error = false;
+	int errorDetected = -1;
 	public TypeTest(String file){
 		this.fileName = file;
 		//Setting up the main window
@@ -111,7 +112,7 @@ class TypeTest{
 			}
 		}
 	}
-	private boolean correctKey(int keyCode){
+	private void correctKey(int keyCode){
 		char key = Character.toLowerCase((char)keyCode);
 
 		SimpleAttributeSet attrs = new SimpleAttributeSet();
@@ -121,28 +122,35 @@ class TypeTest{
 		StyleConstants.setForeground(attrs2, Color.decode("#8B0000"));
 		StyleConstants.setForeground(attrs3, Color.decode("#000000"));
 		StyledDocument sdoc = textArea.getStyledDocument();
-
-		if(charsTyped >= fileString.length()){
-			return false;
+		
+		if(charsTyped >= fileString.length() && !error){
+			return;
 		}
 		if(keyCode == 8){
 			if(charsTyped > wordStart){
 				charsTyped --;
 				sdoc.setCharacterAttributes(charsTyped+1, 1, attrs3, false);
-				if(charsTyped == wordStart+1){
+				System.out.println("errro: " + errorDetected);
+				System.out.println(charsTyped);
+				if(charsTyped == errorDetected){
 					error = false;
+					errorDetected = -1;
 				}
 			}
 		}
 
-		else if(key != fileString.charAt(charsTyped) || error){
+		else if(error || key != fileString.charAt(charsTyped)){
 			error = true;
 			sdoc.setCharacterAttributes(charsTyped, 1, attrs2, false);
+			if(errorDetected == -1){
+				errorDetected = charsTyped;
+			}
 		}
 		else if(key == fileString.charAt(charsTyped)){
 			sdoc.setCharacterAttributes(charsTyped, 1, attrs, false);
+			
 		}
-		return true;
+		return;
 	}
 
 
