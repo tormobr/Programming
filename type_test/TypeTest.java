@@ -24,10 +24,12 @@ class TypeTest{
 	int wordStart = 0;
 	boolean error = false;
 	int errorDetected = -1;
+	JFrame res;
+	JFrame hax;
 	public TypeTest(String file){
 		this.fileName = file;
 		//Setting up the main window
-		JFrame hax = new JFrame("Simple TypeTest.");
+		hax = new JFrame("Simple TypeTest.");
 		hax.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		hax.setSize(800, 350);
 		//hax.setResizable(false);
@@ -72,11 +74,9 @@ class TypeTest{
 		addText(textArray, textArea);
 		fileString = textArea.getText();
 
-		System.out.println(file);
 		hax.setVisible(true);
 	}
 	public static void main(String[] args){
-		System.out.println((int)"A".charAt(0));
 		TypeTest tt = new TypeTest("words.txt");
 
 	}
@@ -84,9 +84,7 @@ class TypeTest{
 	//method for reading the file and inserting the words
 	private void readFile(String fileName){
 		Scanner scanner;
-		try{
-		scanner = new Scanner(new File(fileName));
-		}
+		try{scanner = new Scanner(new File(fileName));}
 		catch(Exception e){return;}
 
 		int index = 0;
@@ -130,8 +128,7 @@ class TypeTest{
 			if(charsTyped > wordStart){
 				charsTyped --;
 				sdoc.setCharacterAttributes(charsTyped+1, 1, attrs3, false);
-				System.out.println("errro: " + errorDetected);
-				System.out.println(charsTyped);
+
 				if(charsTyped == errorDetected){
 					error = false;
 					errorDetected = -1;
@@ -153,6 +150,45 @@ class TypeTest{
 		return;
 	}
 
+	private void displayResults(){
+		endTime = System.currentTimeMillis();
+		double timeUsed = (endTime - startTime)/1000;
+
+
+		res = new JFrame("Simple TypeTest.");
+		res.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		res.setSize(300, 100);
+		JPanel panel = new JPanel(new GridBagLayout());
+		res.add(panel, BorderLayout.NORTH);
+		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(10,10,10,10);
+
+		JLabel percentage = new JLabel("correct word percentage: " + String.valueOf((correctWords/(numberOfWords) * 100)) + "%");
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(percentage, c);
+
+		JLabel wpm = new JLabel("WPM: " + String.valueOf((correctWords*(60) / timeUsed)));
+		c.gridx = 0;
+		c.gridy = 1;
+		panel.add(wpm, c);
+		res.setVisible(true);
+
+		JButton restart = new JButton("RESTART!");
+		restart.addActionListener(new ButtonPress());
+		c.gridx = 0;
+		c.gridy = 2;
+		panel.add(restart, c);
+		res.setVisible(true);	
+	}
+
+	class ButtonPress implements ActionListener{
+		public void actionPerformed(ActionEvent evt){
+			hax.dispose();
+			res.dispose();
+			TypeTest tt2 = new TypeTest("words.txt");
+		}
+	}
 
 	//keypress handler
 	class KeyPress implements KeyListener{
@@ -198,28 +234,7 @@ class TypeTest{
 
 				//when done, add result window to screen
 				if(wordsTyped >= numberOfWords){
-					endTime = System.currentTimeMillis();
-					double timeUsed = (endTime - startTime)/1000;
-
-
-					JFrame res = new JFrame("Simple TypeTest.");
-					res.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					res.setSize(300, 100);
-					JPanel panel = new JPanel(new GridBagLayout());
-					res.add(panel, BorderLayout.NORTH);
-					GridBagConstraints c = new GridBagConstraints();
-					c.insets = new Insets(10,10,10,10);
-
-					JLabel percentage = new JLabel("correct word percentage: " + String.valueOf((correctWords/(numberOfWords) * 100)) + "%");
-					c.gridx = 0;
-					c.gridy = 0;
-					panel.add(percentage, c);
-
-					JLabel wpm = new JLabel("WPM: " + String.valueOf((correctWords*(60) / timeUsed)));
-					c.gridx = 0;
-					c.gridy = 1;
-					panel.add(wpm, c);
-					res.setVisible(true);
+					displayResults();
 					
 				}
 
