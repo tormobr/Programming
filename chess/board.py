@@ -26,18 +26,17 @@ class Board:
 		end_square = self.squares[indexes[1][0]][indexes[1][1]]
 		piece = start_square.piece
 
-		allowed = self.movement.pawn(piece, indexes[0], indexes[1])
-		if allowed:
-			piece.moved = True
-			print("allowed")
-		else:
-			print("Not allowed")
+		
 		if end_square.piece != None and start_square.piece.color == end_square.piece.color:
 			print("CAN'T STRIKE OWN PIECE YOU PLEB")
 			return
-		tmp = start_square.piece
-		end_square.piece = tmp
-		start_square.piece = None
+
+		allowed = self.movement.pawn(piece, start_square, end_square)
+		if allowed:
+			tmp = start_square.piece
+			end_square.piece = tmp
+			start_square.piece = None
+			end_square.piece.moved = True
 
 		def occupied(self, index):
 			if self.squares[index[0]][index[1]].piece == None: 
@@ -58,7 +57,7 @@ class Board:
 
 				position = self.letters[j] + str(i+1)
 
-				squares[i].append(Square(position, piece))
+				squares[i].append(Square(position, piece, j, i))
 		return squares
 
 	def set_pieces(self, i, j):
