@@ -8,7 +8,7 @@ class Board:
 
 	def __init__(self):
 		self.squares = self.generate_board()
-		self.movement = Movement()
+		self.movement = Movement(self.squares)
 		
 
 	def get_index(self, start, end):
@@ -31,17 +31,20 @@ class Board:
 			print("CAN'T STRIKE OWN PIECE YOU PLEB")
 			return
 
-		allowed = self.movement.pawn(piece, start_square, end_square)
+		allowed = self.movement.move(self.squares, piece, start_square, end_square)
 		if allowed:
+			print("allowed")
 			tmp = start_square.piece
 			end_square.piece = tmp
 			start_square.piece = None
 			end_square.piece.moved = True
+		else:
+			print("not allowed")
 
-		def occupied(self, index):
-			if self.squares[index[0]][index[1]].piece == None: 
-				return True
-			return False
+	def occupied(self, index):
+		if self.squares[index[0]][index[1]].piece == None: 
+			return True
+		return False
 
 	def generate_board(self):
 		squares = []
