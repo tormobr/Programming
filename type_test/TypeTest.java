@@ -9,20 +9,20 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 class TypeTest{
-	JTextField input;
-	int wordsTyped = 0;
-	double correctWords = 0;
-	int charsTyped = 0; 
-	String[] textArray = new String[100];
-	double numberOfWords;
-	JTextPane textArea;
-	String fileName;
-	String fileString;
-	int wordStart = 0;
-	boolean error = false;
-	int errorDetected = -1;
-	JFrame res;
-	JFrame hax;
+	private JTextField input;
+	private int wordsTyped = 0;
+	private double correctWords = 0;
+	private int charsTyped = 0; 
+	private String[] textArray = new String[100];
+	private double numberOfWords;
+	private JTextPane textArea;
+	private String fileName;
+	private String fileString;
+	private int wordStart = 0;
+	private boolean error = false;
+	private int errorDetected = -1;
+	private JFrame res;
+	private JFrame hax;
 	public TypeTest(String file){
 		this.fileName = file;
 		//Setting up the main window
@@ -185,9 +185,9 @@ class TypeTest{
 	//restart button handler
 	class ButtonPress implements ActionListener{
 		public void actionPerformed(ActionEvent evt){
+			TypeTest tt2 = new TypeTest("words.txt");
 			hax.dispose();
 			res.dispose();
-			TypeTest tt2 = new TypeTest("words.txt");
 		}
 	}
 

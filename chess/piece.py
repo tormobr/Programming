@@ -2,6 +2,7 @@ from termcolor import colored
 
 class Piece:
 	def __init__(self, name, color, symbol):
+		self.moved = False
 		self.name = name
 		self.color = color
 		self.symbol = symbol

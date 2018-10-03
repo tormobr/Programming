@@ -2,11 +2,50 @@ import sys
 from termcolor import colored
 from square import Square
 from piece import Piece
+from movement import Movement
 class Board:
+	letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+
+	def __init__(self):
+		self.squares = self.generate_board()
+		self.movement = Movement()
+		
+
+	def get_index(self, start, end):
+		start_i = ord(start[0])-65
+		start_j = int(start[1])-1
+
+		end_i = ord(end[0])-65
+		end_j = int(end[1])-1
+		#print(start_i, start_j)
+		return[(start_j, start_i), (end_j, end_i)]
+
+	def move(self, start, end):
+		indexes = self.get_index(start, end)
+		start_square = self.squares[indexes[0][0]][indexes[0][1]]
+		end_square = self.squares[indexes[1][0]][indexes[1][1]]
+		piece = start_square.piece
+
+		allowed = self.movement.pawn(piece, indexes[0], indexes[1])
+		if allowed:
+			piece.moved = True
+			print("allowed")
+		else:
+			print("Not allowed")
+		if end_square.piece != None and start_square.piece.color == end_square.piece.color:
+			print("CAN'T STRIKE OWN PIECE YOU PLEB")
+			return
+		tmp = start_square.piece
+		end_square.piece = tmp
+		start_square.piece = None
+
+		def occupied(self, index):
+			if self.squares[index[0]][index[1]].piece == None: 
+				return True
+			return False
 
 	def generate_board(self):
 		squares = []
-		letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
 		for i in range(8):
 			squares.append([])
@@ -17,7 +56,7 @@ class Board:
 				if piece_info[0] != None:
 					piece = Piece(piece_info[0], piece_info[1], piece_info[2])
 
-				position = letters[j] + str(i+1)
+				position = self.letters[j] + str(i+1)
 
 				squares[i].append(Square(position, piece))
 		return squares
@@ -56,17 +95,32 @@ class Board:
 
 		return (piece,color, symbol)
 
-	def print_board(self):
-		for x in hax:
-			print("--------------------------------")
+
+	def __repr__(self):
+		"""
+		simply prints the board with pieces.
+		"""
+		ret = ""
+		for i, x in enumerate(self.squares):
+
+			ret += "\t"
+			for j in range(32): ret += u"\u2015"
+			ret += "\n\t|"
 			for y in x:
-				sys.stdout.write(" | ")
-				sys.stdout.write(str(y))
-				sys.stdout.write(" | ")
-				#print(y,)
-			print()
+				ret += str(y)
+				ret += " | "
+
+			ret += str(i+1) + "\n"
+
+		ret += "\t"
+		for i in range(32): ret += u"\u2015"
+		ret += "\n         "
+
+		for l in self.letters:
+			ret += l+"   "
+		return ret
 
 if __name__=="__main__":
 	b = Board()
 	hax = b.generate_board()
-	b.print_board()
+	print(b)
