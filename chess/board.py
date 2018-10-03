@@ -5,7 +5,8 @@ from piece import Piece
 from movement import Movement
 class Board:
 	letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-
+	white_king = None
+	black_king = None
 	def __init__(self):
 		self.squares = self.generate_board()
 		self.movement = Movement(self.squares)
@@ -32,6 +33,7 @@ class Board:
 			return
 
 		allowed = self.movement.move(self.squares, piece, start_square, end_square)
+
 		if allowed:
 			print("allowed")
 			tmp = start_square.piece
@@ -40,6 +42,9 @@ class Board:
 			end_square.piece.moved = True
 		else:
 			print("not allowed")
+
+		check = self.movement.check_check(self.squares, self.white_king, self.black_king)
+		print(check)
 
 	def occupied(self, index):
 		if self.squares[index[0]][index[1]].piece == None: 
@@ -61,6 +66,8 @@ class Board:
 				position = self.letters[j] + str(i+1)
 
 				squares[i].append(Square(position, piece, j, i))
+		self.white_king = squares[0][4]
+		self.black_king = squares[7][4]
 		return squares
 
 	def set_pieces(self, i, j):
