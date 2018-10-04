@@ -21,18 +21,22 @@ class Board:
 		#print(start_i, start_j)
 		return[(start_j, start_i), (end_j, end_i)]
 
-	def move(self, start, end):
-		indexes = self.get_index(start, end)
-		start_square = self.squares[indexes[0][0]][indexes[0][1]]
-		end_square = self.squares[indexes[1][0]][indexes[1][1]]
-		piece = start_square.piece
+	def move(self, start, end, color):
+		#indexes = self.get_index(start, end)
+		#start_square = self.squares[indexes[0][0]][indexes[0][1]]
+		#end_square = self.squares[indexes[1][0]][indexes[1][1]]
+		start_square = self.squares[start[1]][start[0]]
+		end_square = self.squares[end[1]][end[0]]
+		start_piece = start_square.piece
+		end_piece = end_square.piece
 
-		
-		if end_square.piece != None and start_square.piece.color == end_square.piece.color:
-			print("CAN'T STRIKE OWN PIECE YOU PLEB")
-			return
+		print("start_square: {}   end_Square:  {}".format(start_square, end_square))
 
-		allowed = self.movement.move(self.squares, piece, start_square, end_square)
+
+		if end_piece != None and start_piece.color == end_pieceself.color or start_piece.color != color:
+			print("Cant make this move!!")
+
+		allowed = self.movement.move(self.squares, start_piece, start_square, end_square)
 
 		if allowed:
 			print("allowed")
@@ -42,9 +46,9 @@ class Board:
 			end_square.piece.moved = True
 		else:
 			print("not allowed")
-
+		print(self)
 		check = self.movement.check_check(self.squares, self.white_king, self.black_king)
-		print(check)
+		return self.squares
 
 	def occupied(self, index):
 		if self.squares[index[0]][index[1]].piece == None: 

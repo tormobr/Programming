@@ -14,15 +14,15 @@ class Movement:
 
 
 	def pawn(self, piece, start, end):
-		print("moving pawn")
 		distX = end.x - start.x
 		distY = 0
 		if piece.color == "white":
 			distY = end.y - start.y
 		else:
 			distY = start.y - end.y
-		print(distX, distY)
 
+		if distX == 0 and end.piece != None:
+			return False
 		if distY == 1 and distX == 1 and end.piece != None:
 			print("capture")
 			return True
@@ -82,13 +82,11 @@ class Movement:
 		elif distY > 0: moveY = 1
 
 		
-		print("movex: {}  movey: {} ".format(moveX, moveY))
 
 		x = start.x + moveX
 		y = start.y + moveY
 
 		while x != end.x or y != end.y:
-			print("x: {}  y: {} ".format(x, y))
 			
 			if self.board[y][x].piece != None  and self.board[y][x].piece.color == piece.color:
 				print("square: {}  piece: {} in the way".format(self.board[y][x].position, self.board[y][x].piece))
@@ -102,8 +100,6 @@ class Movement:
 		check_white = False
 		check_black = False
 
-		print("king 1: ", white_king)
-		print("king 2: ", black_king)
 		permutations = [(0,1), (0,-1), (1,0), (-1,0), (1,1), (1,-1), (-1,1), (-1,-1)]
 
 		#for p in permutations:
@@ -119,13 +115,15 @@ class Movement:
 
 
 	def check_check_help(self, movement, color, king):
-		threats = ["knig", "bish", "quen", "pawn", "rook"]
+		threats = ["knig", "bish", "quen", "rook"]
 		x = king.x + movement[0]
 		y = king.y + movement[1]
 		while 0 <= x <= 7 and 0 <= y <= 7:
 			if self.board[y][x].piece != None and self.board[y][x].piece.name in threats and self.board[y][x].piece.color != color:
 				print("check detected!!!!!!!!!")
+				print("x: {}  y: {} piece: {}".format(x, y, self.board[y][x].piece))
 				return True
+			
 			x += movement[0]
 			y += movement[1]
 		return False
